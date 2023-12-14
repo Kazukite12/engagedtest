@@ -61,9 +61,6 @@ fieldset {
     margin-top: 25px !important;
 }
 
-
-
-
 fieldset h2 {
     font-size: 25px;
     color: gray;
@@ -310,6 +307,20 @@ form .action-button {
     #hero {
         width: 100%;
         padding: 10px 15px 10px 15px;
+    }
+
+   
+
+
+    .td-option {
+        vertical-align: middle;
+        text-align:start;
+    }
+
+    .icheck-primary {
+        width: 50%;
+        margin: 0 !important;
+        margin-right: 10px !important;
     }
 
     #hero h1 {

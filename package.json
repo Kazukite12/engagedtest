@@ -2,7 +2,6 @@
   "name": "service-ac",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://nofelwindo.com/engagedtest",
   "type": "module",
   "scripts": {
     "dev": "vite",

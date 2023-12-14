@@ -79,7 +79,7 @@ const Body =()=> {
 
     function handleSubmit(e) {
         e.preventDefault()
-        alert("kotnol")
+
         const total = Number(jawaban1)+Number(jawaban2)+Number(jawaban3)+Number(jawaban4)+Number(jawaban5)+Number(jawaban6)+Number(jawaban7)+Number(jawaban8)+Number(jawaban9)+Number(jawaban10)+Number(jawaban11)+Number(jawaban12)
         setFinal(total)
 

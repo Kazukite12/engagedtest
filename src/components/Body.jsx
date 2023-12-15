@@ -27,47 +27,15 @@ const Body =()=> {
     const [jawaban11, setJawaban11] = useState(0);
     const [jawaban12, setJawaban12] = useState(0);
 
+
+    const [jawaban, setJawaban] = useState({});
+
     function addValue(value,noSoal) {
-        switch(noSoal) {
-            case 1:
-                setJawaban1(value);   
-                break;
-            case 2:
-                setJawaban2(value);
-                break;
-            case 3:
-                setJawaban3(value);
-                break;
-            case 4:
-                setJawaban4(value);
-                break;
-            case 5:
-                setJawaban5(value);
-                break;
-            case 6:
-                setJawaban6(value);
-                break;
-            case 7:
-                setJawaban7(value);
-                break;
-            case 8:
-                setJawaban8(value);
-                break;
-            case 9:
-                setJawaban9(value);
-                break;
-            case 10:
-                setJawaban10(value);
-                break;
-            case 11:
-                setJawaban11(value);
-                break;
-            case 12:
-                setJawaban12(value);
-                break;
-            
-        }
-    }
+        setJawaban((prevJawaban)=> ({
+            ...prevJawaban,
+            [noSoal]:value,
+        }));
+    };
 
     const [final,setFinal] = useState(0);
 
@@ -77,17 +45,22 @@ const Body =()=> {
 
     
 
-    function handleSubmit(e) {
+    const handleSubmit =(e)=> {
         e.preventDefault()
 
-        const total = Number(jawaban1)+Number(jawaban2)+Number(jawaban3)+Number(jawaban4)+Number(jawaban5)+Number(jawaban6)+Number(jawaban7)+Number(jawaban8)+Number(jawaban9)+Number(jawaban10)+Number(jawaban11)+Number(jawaban12)
-        setFinal(total)
+        const jawabanValues = Object.values(jawaban);
+        const totalSum = jawabanValues.reduce((sum, currentValue) => sum + parseInt(currentValue), 0);
 
-        if (total >= 16 && total <= 32) {
+        console.log("Total Sum:", totalSum);
+
+        const total = Number(jawaban1)+Number(jawaban2)+Number(jawaban3)+Number(jawaban4)+Number(jawaban5)+Number(jawaban6)+Number(jawaban7)+Number(jawaban8)+Number(jawaban9)+Number(jawaban10)+Number(jawaban11)+Number(jawaban12)
+        setFinal(totalSum)
+
+        if (totalSum >= 16 && totalSum <= 32) {
             setResult("ACTIVELY DISENGAGED")
-        } else if (total >= 33 && total <=64) {
+        } else if (totalSum >= 33 && totalSum <=64) {
             setResult("ENGAGED")
-        } else if (total > 64 ) {
+        } else if (totalSum > 64 ) {
             setResult("SANGAT ENGAGED")
         }
     }
@@ -123,7 +96,7 @@ const Body =()=> {
                             <label className="fieldlabels">Email: *</label>
                             <input required></input>
                         </div>
-                        <input onClick={()=>changeField("2",70)} className="action-button" value="Next" type="next" />
+                        <input onClick={()=>changeField("2",70)} className="action-button" value="Next" type="submit" />
                     </fieldset>
 
                     <fieldset className={step == "2" ? "second":"second-hide"}>
@@ -151,6 +124,7 @@ const Body =()=> {
                                             id={item.no+"id"+"1"} 
                                             value={item.multiplier*1} 
                                             name={"soal ke"+item.no} 
+                                          
                                             />
                                             <label 
                                             className="form-check-label"
@@ -164,6 +138,7 @@ const Body =()=> {
                                             onChange={e=>addValue(e.target.value, item.no)} 
                                             value={item.multiplier*2} 
                                             name={"soal ke"+item.no} 
+                                    
                                             />
                                             <label className="form-check-label"  htmlFor={item.no+"id"+"2"}>Tidak Setuju</label>
                                         </div>
@@ -175,6 +150,7 @@ const Body =()=> {
                                             onChange={e=>addValue(e.target.value, item.no)} 
                                             value={item.multiplier*3} 
                                             name={"soal ke"+item.no} 
+                                  
                                             />
                                             <label className="form-check-label"  htmlFor={item.no+"id"+"3"} >Kurang Setuju</label>
                                         </div>
@@ -185,7 +161,8 @@ const Body =()=> {
                                             id={item.no+"id"+"4"} 
                                             onChange={e=>addValue(e.target.value, item.no)} 
                                             value={item.multiplier*4} 
-                                            name={"soal ke"+item.no} 
+                                            name={"soal ke"+item.no}
+                                   
                                            />
                                             <label className="form-check-label"  htmlFor={item.no+"id"+"4"}>Setuju</label>
                                         </div>
@@ -197,11 +174,14 @@ const Body =()=> {
                                             onChange={e=>addValue(e.target.value, item.no)} 
                                             value={item.multiplier*5} 
                                             name={"soal ke"+item.no} 
+                                     
                                             />
                                             <label className="form-check-label"  htmlFor={item.no+"id"+"5"} >Sangat Setuju</label>
-                                        </div>                                  
-                                    </td>
+                                        </div>    
+                                        <p>perlu diisi</p>                             
                                          
+                                        
+                                    </td>
                                     </tr>
                                         </>
                                         

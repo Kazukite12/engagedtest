@@ -8,27 +8,21 @@ import logo from "../assets/logo_new.png"
 import "icheck-bootstrap"
 import { dataSoal } from "./data-soal";
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import Engaged from "../assets/Engaged.png";
+import ActivelyEngaged from "../assets/Actively Engaged.png";
+import ActivelyDisengaged from "../assets/Actively Disengaged.png";
+import sampul from "../assets/Sampul Pengantar.png";
+
+
 
 
 
 const Body =()=> {
 
-    const [currentQuestion, setCurrentQuestion] = useState(null);
-    const [jawaban1, setJawaban1] = useState();
-    const [jawaban2, setJawaban2] = useState();
-    const [jawaban3, setJawaban3] = useState();
-    const [jawaban4, setJawaban4] = useState(0);
-    const [jawaban5, setJawaban5] = useState(0);
-    const [jawaban6, setJawaban6] = useState(0);
-    const [jawaban7, setJawaban7] = useState(0);
-    const [jawaban8, setJawaban8] = useState(0);
-    const [jawaban9, setJawaban9] = useState(0);
-    const [jawaban10, setJawaban10] = useState(0);
-    const [jawaban11, setJawaban11] = useState(0);
-    const [jawaban12, setJawaban12] = useState(0);
-
 
     const [jawaban, setJawaban] = useState({});
+    const [name, setName]= useState("");
+    const [email,setEmail] = useState("");
 
     function addValue(value,noSoal) {
         setJawaban((prevJawaban)=> ({
@@ -37,38 +31,62 @@ const Body =()=> {
         }));
     };
 
-    const [final,setFinal] = useState(0);
-
     const [step,setStep] = useState("1");
 
     const [result,setResult] = useState("");
+    const [resultImage,setResultImage] = useState();
 
     
 
-    const handleSubmit =(e)=> {
+    function handleSubmit(e) {
         e.preventDefault()
 
-        const jawabanValues = Object.values(jawaban);
-        const totalSum = jawabanValues.reduce((sum, currentValue) => sum + parseInt(currentValue), 0);
+       
+            const jawabanValues = Object.values(jawaban);
+            const totalSum = jawabanValues.reduce((sum, currentValue) => sum + parseInt(currentValue), 0);
+    
+            console.log("Total Sum:", totalSum);
+    
+            if (totalSum >= 16 && totalSum <= 32) {
+                setResult("ACTIVELY DISENGAGED");
+                setResultImage(ActivelyDisengaged);
+            } else if (totalSum >= 33 && totalSum <=64) {
+                setResult("ENGAGED");
+                setResultImage(Engaged);
+            } else if (totalSum > 64 ) {
+                setResult("ACTIVELY ENGAGED");
+                setResultImage(ActivelyEngaged);
+            }
 
-        console.log("Total Sum:", totalSum);
-
-        const total = Number(jawaban1)+Number(jawaban2)+Number(jawaban3)+Number(jawaban4)+Number(jawaban5)+Number(jawaban6)+Number(jawaban7)+Number(jawaban8)+Number(jawaban9)+Number(jawaban10)+Number(jawaban11)+Number(jawaban12)
-        setFinal(totalSum)
-
-        if (totalSum >= 16 && totalSum <= 32) {
-            setResult("ACTIVELY DISENGAGED")
-        } else if (totalSum >= 33 && totalSum <=64) {
-            setResult("ENGAGED")
-        } else if (totalSum > 64 ) {
-            setResult("SANGAT ENGAGED")
-        }
     }
     const [progress,setProgress]= useState(25);
 
+    const [warning, setWarning]= useState(false);
+
+
     const changeField =(Step,value)=> {
-        setStep(Step)
-        setProgress(value);
+
+
+        if (step == "1") {
+            
+            if (name == "" || email == "") {
+            setWarning(true);
+            }  else {
+                setStep(Step);
+             setProgress(value);
+             setWarning(false);
+            }
+            
+        } else if (step == "2") {
+            if (Object.values(jawaban).length != 12 && Step == "3") {
+                setWarning(true);
+            } else {
+                setStep(Step);
+            setProgress(value);
+            setWarning(false)
+            }
+        } 
+
         
     }
 
@@ -78,11 +96,26 @@ const Body =()=> {
             
 
     
-            <section id="hero">
+            <section id="hero" className={step == "3" ? "question-hide":"question"}>
                 <img src={logo} />
                 <hr />
+                {step == "1" ?  <img className="sampul" src={sampul} /> : 
+                <>
+                
                 <h3>ISI SESUAI KONDISI ANDA</h3>
-                <p>Silahkan Anda tentukan pilihan sesuai dengan yang Anda rasakan dan atau alami sendiri. Dengan cara memilih jawaban SETUJU atau TIDAK SETUJU setelah membaca pernyataannya.</p>
+                <p>Silahkan Anda tentukan pilihan dari setiap pernyataan sesuai dengan yang Anda rasakan dan atau alami sendiri. Dengan cara memilih salah satu jawaban dari lima kategori jenis jawaban : <br></br>
+                1. Sangat Setuju, 
+                <br></br>
+                2. Setuju,
+                <br></br> 
+                3. Kurang Setuju,
+                <br></br> 
+                4. Tidak setuju,
+                <br></br> 
+                5. Sangat Tidak Setuju.</p> 
+                </>
+                }
+                
                 <form onSubmit={handleSubmit}>
                 <ProgressBar className="progress-bar" variant="success" min={1} max={100} striped={true} animated now={progress} />
                     <fieldset className={step == 1 ? "first":"first-hide"}>
@@ -92,11 +125,17 @@ const Body =()=> {
                                 <h2 className="step">Step 1 - 3</h2>
                             </div>
                             <label className="fieldlabels">Nama Lengkap: *</label>
-                            <input required></input>
+                            <input onKeyPress={e => {
+  if (e.key === 'Enter') e.preventDefault();
+}}  value={name} onChange={e=>setName(e.target.value)}></input>
+                            <p className={warning == true?"warning":"hide-warning"}>{name == "" ? "Perlu Diisi":""}</p>
                             <label className="fieldlabels">Email: *</label>
-                            <input required></input>
+                            <input onKeyPress={e => {
+  if (e.key === 'Enter') e.preventDefault();
+}}  value={email} onChange={e=>setEmail(e.target.value)}></input>
+                            <p className={warning == true?"warning":"hide-warning"}>{email == "" ? "Perlu Diisi":""}</p>
                         </div>
-                        <input onClick={()=>changeField("2",70)} className="action-button" value="Next" type="submit" />
+                        <input onClick={()=>changeField("2",70)} className="action-button" value="Next"/>
                     </fieldset>
 
                     <fieldset className={step == "2" ? "second":"second-hide"}>
@@ -124,7 +163,7 @@ const Body =()=> {
                                             id={item.no+"id"+"1"} 
                                             value={item.multiplier*1} 
                                             name={"soal ke"+item.no} 
-                                          
+                                          /*  */
                                             />
                                             <label 
                                             className="form-check-label"
@@ -178,9 +217,12 @@ const Body =()=> {
                                             />
                                             <label className="form-check-label"  htmlFor={item.no+"id"+"5"} >Sangat Setuju</label>
                                         </div>    
-                                        <p>perlu diisi</p>                             
-                                         
                                         
+                                        
+                                        <p className={warning == true?"warning":"hide-warning"}>{jawaban[item.no] == null ? "Perlu Diisi":""}</p>
+                                        
+                                         
+                                
                                     </td>
                                     </tr>
                                         </>
@@ -192,25 +234,27 @@ const Body =()=> {
 
                             </table>
                         </div>
-                        <input onClick={()=>changeField("3",100)} className="action-button" value="Next" type="submit" />
+                        <input onClick={()=>changeField("3",100)} className="action-button" value="Next"  type="submit" />
                         <input onClick={()=>changeField("1",25)} className="action-button" value="Previous" />
                     </fieldset>
+                </form>
 
+            </section>
 
-                    <fieldset className={step == "3" ? "third":"third-hide"}>
+            <section id="hero" className={step == "3" ? "":"result-hide"} >
+            <img src={logo} />
+                <hr />
+                <fieldset className={step == "3" ? "third":"third-hide"}>
                     <div className="form-card">
-                            <div className="head">
-                                <h2 className="identitas">Finish</h2>
-                                <h2 className="step">Step 3 - 3</h2>
-                            </div>
+                        
                             <div className="hasil">
                                 <table>
                                     <tbody>
-                                        <tr>Hasil</tr>
-                                        <tr>
-                                            <td>
-                                                ANDA ADALAH TIPE <strong>{result}</strong>
-            
+                                
+                                       
+                                        <tr className="image-result">
+                                            <td className="result">
+                                                <img src={resultImage} />
                                             </td>
                                         </tr>
                                     </tbody>
@@ -220,7 +264,7 @@ const Body =()=> {
                         </div>
                        
                     </fieldset>
-                </form>
+
             </section>
         </div>
     )

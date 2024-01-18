@@ -1,8 +1,32 @@
 import "../style/Dashboard.css"
 import logo from "../assets/logo_new.png"
+import React, { useEffect, useState } from "react"
 
 
 const Dashboard =()=> {
+
+
+    const [date, setDate]= useState('')
+
+    const [data, setData] = useState([{}])
+
+    const unixDate = parseInt((new Date(date).getTime() / 1000).toFixed(0))
+
+    console.log(unixDate)
+
+    console.log(date)
+
+    console.log(data)
+
+    const readData =()=> {
+        // Sort results by id in descending order, take two
+// and return the age as an integer.
+
+    fetch(`https://sheetdb.io/api/v1/v76h1ntnjvd9v/search?Tanggal=${date}`)
+        .then((response) => response.json())
+        .then((data) => setData(data));
+    }
+
     return (
         <div className="dashboard-page">
             <div className="header">
@@ -28,14 +52,10 @@ const Dashboard =()=> {
                                         <tr>
                                             <td>Periode</td>
                                             <td>
-                                                <input type="date" />
-                                            </td>
-                                            <td>-</td>
-                                            <td>
-                                                <input type="date" />
+                                                <input type="date" value={date} onChange={e=> setDate(e.target.value)} />
                                             </td>
                                             <td>
-                                                <a className="btn-cari">Cari</a>
+                                                <a onClick={()=>readData()} className="btn-cari">Cari</a>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -64,14 +84,17 @@ const Dashboard =()=> {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td className="td-body">1</td>
-                                                <td className="td-body">2023-12-14</td>
-                                                <td className="td-body">Ujang Ranger</td>
-                                                <td className="td-body">Ujang@gmail.com</td>
-                                                <td className="td-body">10</td>
-                                                <td className="td-body">ENgaged</td>
-                                            </tr>
+                                            {data.map((data,index)=> (
+                                                <tr key={index}>
+                                                     <td className="td-body">{data.No}</td>
+                                                     <td className="td-body">{data.Tanggal}</td>
+                                                     <td className="td-body">{data.Nama}</td>
+                                                     <td className="td-body">{data.Email}</td>
+                                                     <td className="td-body">{data.Skor}</td>
+                                                     <td className="td-body">{data.Hasil}</td>
+                                                 </tr>
+                                            ))}
+                                           
                                         </tbody>
                                     </table>
 

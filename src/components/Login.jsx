@@ -3,11 +3,9 @@ import "../style/login.css"
 import { Navigate } from "react-router-dom";
 
 
-const Login =()=> {
+const Login =({setAuth, auth})=> {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
-    const [auth, setAuth] = useState(false);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -21,7 +19,7 @@ const Login =()=> {
     }
 
     if (auth) {
-        return <Navigate to="/" />
+        return <Navigate to="/Dashboard" />
     }
 
     return (
@@ -47,7 +45,7 @@ const Login =()=> {
                 </form>
             </div>
 
-        </div>
+            </div>
         </div>
     )
 }

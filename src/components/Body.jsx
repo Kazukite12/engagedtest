@@ -23,6 +23,13 @@ const Body =()=> {
     const [jawaban, setJawaban] = useState({});
     const [name, setName]= useState("");
     const [email,setEmail] = useState("");
+    const [step,setStep] = useState("1");
+
+    const [result,setResult] = useState("");
+    const [resultImage,setResultImage] = useState();
+
+    const [disabled, setDisabled] = useState(false);
+
 
     function addValue(value,noSoal) {
         setJawaban((prevJawaban)=> ({
@@ -31,10 +38,6 @@ const Body =()=> {
         }));
     };
 
-    const [step,setStep] = useState("1");
-
-    const [result,setResult] = useState("");
-    const [resultImage,setResultImage] = useState();
 
     
 
@@ -45,28 +48,32 @@ const Body =()=> {
             const jawabanValues = Object.values(jawaban);
             const totalSum = jawabanValues.reduce((sum, currentValue) => sum + parseInt(currentValue), 0);
     
-            console.log("Total Sum:", totalSum);
+            if (Object.values(jawaban).length == 12) {
+                if (totalSum >= 16 && totalSum <= 32) {
+                    setResult("ACTIVELY DISENGAGED");
+                    setResultImage(ActivelyDisengaged);
+                    submitResult("ACTIVELY DISENGAGED")
+                } else if (totalSum >= 33 && totalSum <=64) {
+                    setResult("ENGAGED");
+                    setResultImage(Engaged);
+                    submitResult("ENGAGED")
+                } else if (totalSum > 64 ) {
+                    setResult("ACTIVELY ENGAGED");
+                    setResultImage(ActivelyEngaged);
+                    submitResult("ACTIVELY ENGAGED")
+                }
+            }   
     
-            if (totalSum >= 16 && totalSum <= 32) {
-                setResult("ACTIVELY DISENGAGED");
-                setResultImage(ActivelyDisengaged);
-            } else if (totalSum >= 33 && totalSum <=64) {
-                setResult("ENGAGED");
-                setResultImage(Engaged);
-            } else if (totalSum > 64 ) {
-                setResult("ACTIVELY ENGAGED");
-                setResultImage(ActivelyEngaged);
-            }
-
     }
     const [progress,setProgress]= useState(25);
 
     const [warning, setWarning]= useState(false);
 
 
+
+
+
     const changeField =(Step,value)=> {
-
-
         if (step == "1") {
             
             if (name == "" || email == "") {
@@ -83,12 +90,52 @@ const Body =()=> {
             } else {
                 setStep(Step);
             setProgress(value);
-            setWarning(false)
+            setWarning(false);
             }
         } 
 
         
     }
+
+    const date = new Date();
+
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+// This arrangement can be altered based on how we want the date's format to appear.
+    let currentDate = `${year}-${month}-${day}`;
+
+    console.log(String(currentDate))
+
+
+    const submitResult =(finalResult)=> {
+        const jawabanValues = Object.values(jawaban);
+
+        const totalSum = jawabanValues.reduce((sum, currentValue) => sum + parseInt(currentValue), 0);
+
+        fetch('https://sheetdb.io/api/v1/v76h1ntnjvd9v', {
+    method: 'POST',
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        data: [
+            {
+                'No': "INCREMENT",
+                'Tanggal': String(currentDate),
+                'Nama':name,
+                'Email':email,
+                'Skor': totalSum,
+                'Hasil':finalResult
+            }
+        ]
+    })
+})
+  .then((response) => response.json())
+  .then((data) => console.log(data));
+}
 
     
     return (
@@ -104,15 +151,15 @@ const Body =()=> {
                 
                 <h3>ISI SESUAI KONDISI ANDA</h3>
                 <p>Silahkan Anda tentukan pilihan dari setiap pernyataan sesuai dengan yang Anda rasakan dan atau alami sendiri. Dengan cara memilih salah satu jawaban dari lima kategori jenis jawaban : <br></br>
-                1. Sangat Setuju, 
+                1. Sangat Tidak Setuju, 
                 <br></br>
-                2. Setuju,
+                2. Tidak Setuju,
                 <br></br> 
                 3. Kurang Setuju,
                 <br></br> 
-                4. Tidak setuju,
+                4. Setuju,
                 <br></br> 
-                5. Sangat Tidak Setuju.</p> 
+                5. Sangat Setuju.</p> 
                 </>
                 }
                 
@@ -153,8 +200,13 @@ const Body =()=> {
                                         <td>{item.no}</td>
                                         <td>{item.soal}</td>
                                     </tr>
-                                    <tr>
+                                    <tr >
                                     <td colSpan="2" className="td-option"> 
+                                        
+                                        <div className="option-wrapper">
+
+
+                                        
                                         <div className="icheck-primary icheck-inline">
                                             <input 
                                             className="form-check-input" 
@@ -221,7 +273,8 @@ const Body =()=> {
                                         
                                         <p className={warning == true?"warning":"hide-warning"}>{jawaban[item.no] == null ? "Perlu Diisi":""}</p>
                                         
-                                         
+                                        </div>
+                                        
                                 
                                     </td>
                                     </tr>
@@ -234,7 +287,7 @@ const Body =()=> {
 
                             </table>
                         </div>
-                        <input onClick={()=>changeField("3",100)} className="action-button" value="Next"  type="submit" />
+                        <input onClick={()=>changeField("3",100)} className="action-button"  value="Next" type="submit" />
                         <input onClick={()=>changeField("1",25)} className="action-button" value="Previous" />
                     </fieldset>
                 </form>

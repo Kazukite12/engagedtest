@@ -7,19 +7,25 @@ import { Router } from 'react-router-dom'
 import { Routes,Route } from 'react-router-dom'
 import Login from './components/Login'
 import Dashboard from './components/Dashboard'
+import ProtectedRoute from './components/protected-route'
 
 
 function App() {
 
+  const [auth,setAuth] = useState(false);
+
+
   return (
      <>
-     <BrowserRouter>
+     <HashRouter>
         <Routes>
           <Route path='/' element={<Body/>} />
-          <Route path='/login' element={<Login/>} />
-          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/login' element={<Login auth={auth} setAuth={setAuth}/>} />
+          <Route path='/dashboard' element={<ProtectedRoute auth={auth}>
+              <Dashboard />
+          </ProtectedRoute>} />
         </Routes>
-     </BrowserRouter>
+     </HashRouter>
      </>
  
   )

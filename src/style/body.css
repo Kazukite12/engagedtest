@@ -72,6 +72,7 @@
 
 .td-option {
     width: 100%;
+    background: tan;
 }
 
 .option-wrapper {
@@ -321,6 +322,12 @@ form .action-button {
     display: none;
 }
 
+.option-wrapper {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+
 .sampul {
     width: 350px !important;
     height: auto !important;
@@ -344,13 +351,13 @@ form .action-button {
     }
 
     .result {
-        width: 55vw;
-        height: 55vh !important;
+        width: 60vw;
+        height: 60vh !important;
     }
     
     .result img {
-        object-fit:cover;
-        width: 70vw !important;
+        object-fit:contain;
+        width: 100vw !important;
         height: 70vh !important;
     }
     
@@ -364,8 +371,10 @@ form .action-button {
         display: none !important;
     }
     
-
-   
+    .option-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
 
 
     .td-option {

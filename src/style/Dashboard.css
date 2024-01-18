@@ -41,6 +41,7 @@
     position: relative;
     border-radius: 3px;
     background: #ffffff;
+    overflow-x: scroll;
     border-top: 3px solid #d2d6de;
     margin-bottom: 20px;
     width: 100% !important;
@@ -55,6 +56,7 @@
 .td-body {
     text-align: center;
     border: 1px solid #f4f4f4;
+    
 }
 
 .btn-cari {
@@ -67,7 +69,6 @@
     text-decoration: none;
     cursor: pointer;
 }
-
 
 
 tr {

@@ -94,6 +94,14 @@ const Dashboard =()=> {
                                                      <td className="td-body">{data.Hasil}</td>
                                                  </tr>
                                             ))}
+                                             <tr >
+                                                     <td className="td-body">1</td>
+                                                     <td className="td-body">2</td>
+                                                     <td className="td-body">3</td>
+                                                     <td className="td-body">4</td>
+                                                     <td className="td-body">5</td>
+                                                     <td className="td-body">6</td>
+                                                 </tr>
                                            
                                         </tbody>
                                     </table>
